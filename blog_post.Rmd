@@ -1,7 +1,7 @@
 ---
-title: "Hydrology Blog Post"
+title: "Getting your toes wet in R: Hydrology, meteorology, and more"
 author: "Sam Albers, Ilaria Prosdocimi and Sam Zipper, "
-date: "25/01/2019"
+date: "18/02/2019"
 output: html_document
 ---
 
@@ -10,11 +10,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Importance of Hydrology
-We recently contributed a new [task view](https://github.com/ropensci/Hydrology) specific to the field of hydrology to [CRAN](	https://CRAN.R-project.org/view=Hydrology). Our intent is to be exhaustive and gather as many R packages related to the movement of water across the Earth's landscape. This includes packages that access, model and summarise water information. Another goal is to build upon a nascent hydrological community in R and develop an infrastructure of packages that provide a comprehensive toolkit for water practiontioners who use R as their preferred computational analysis tool. Making sense of water data promises to be a critical tool to understanding the response of landscapes to climate change. Consolidating hydrology--related packages will promote their usage and discovery and ultimately facilitate reproducible workflows to help address future water needs. Since this is a new task view, it serves our purpose to evaluate the current State of Hydrology in R and look at the interdependency of hydrology packages against some better know collections of packages in the general R ecosysyem. 
+Given that liquid water is [essential to life on Earth](https://www.amnh.org/explore/science-topics/water-and-life-on-earth), water research cuts across numerous disciplines including hydrology, meteorology, geography, climate science, engineering, ecology, and more. Numerous R packages have emerged from this diversity of approaches, and we recently gathered many of these packages into a new [task view](https://github.com/ropensci/Hydrology) which we broadly titled 'hydrology' and posted to [CRAN](https://CRAN.R-project.org/view=Hydrology). Our intent is to be exhaustive and compile R packages to access, model, and summarise information related to the movement of water across the Earth's landscape. We hope to contribute to a [nascent community of hydrological R users](https://www.hydrol-earth-syst-sci-discuss.net/hess-2019-50/) and develop an infrastructure of packages that provide a comprehensive toolkit for water practioners who use R as their preferred computational analysis tool. Making sense of water data is critical to understanding the response of landscapes to climate change. Consolidating water-related packages will promote their usage and discovery and ultimately facilitate reproducible workflows for water research. Since this is a new task view, it serves our purpose to evaluate the current State of Hydrology in R and look at the interdependency of hydrology packages against some better known collections of packages in the general R ecosysyem. 
 
 ## State of Hydrology in R
-At the highest level, we can assess the state of hydrology in R using an eye-test of connectivity related which packages import each other -- which packages use code from one package to accomplish a task. Visually we can accomplish this with network graphs connecting dependencies between groups of packages. For context, we will evaluate our hydrology task views against the most well know collection of packages in R, the tidyverse and a venerable task view which includes many important packages for Environmental Analysis, [Environmetrics](https://CRAN.R-project.org/view=Environmetrics
-). To do that we need write some R code:
+We will conduct a high-level assessment of the state of hydrology in R by visualizing network connectivity among package dependencies -- which packages use code from one package to accomplish a task. For context, we will evaluate our Hydrology task view against the most well-known collection of packages in R, the [tidyverse](https://www.tidyverse.org/), and the venerable [Environmetrics task view](https://CRAN.R-project.org/view=Environmetrics
+) which includes many packages for environmental Analysis. To do that we need write some R code:
 
 ![](https://media.giphy.com/media/xT8qBmSnYDXS21ZvHO/giphy.gif)
 
@@ -27,7 +27,7 @@ library(ggraph)
 library(ctv)
 ```
 
-In the tools package (which ships with base R) there exists, the very handy `CRAN_package_db` function which very conveniently grabs information from every package from their DESCRIPTION file and turns it into a dataframe. Here we are only after a few columns so we will extract those right away:
+We will use the handy `CRAN_package_db` function from the `tools` package (part of base R) which conveniently grabs information from the DESCRIPTION file of every package and turns it into a dataframe. Here we are only after a few columns so we will extract those right away:
 ```{r, cache=TRUE}
 all_cran_packages <- tools::CRAN_package_db()[,c("Package", "Imports", "Packaged")] 
 ```
@@ -45,7 +45,7 @@ tidied_cran_imports <- all_cran_packages %>%
   mutate(Packaged = format(as.Date(Packaged), "%Y"))
 ```
 
-Now if we first take a look at the tidyverse, we can take the rare step of actually using a function from the tidyverse package which identifies those packages actually belonging to the tidyverse (`tidyverse_packages`). We filter for those packages and then convert to the `tbl_graph`. This is then easily plotted using `ggraph`:
+First, let's take a look at the tidyverse. We can take the rare step of actually using a function from the tidyverse package (`tidyverse_packages`), which identifies those packages actually belonging to the tidyverse. We filter for those packages and then convert to the `tbl_graph` which is then easily plotted using `ggraph`:
 ```{r}
 tidyverse_tbl <- tidied_cran_imports %>% 
   select(-Packaged) %>% 
@@ -60,7 +60,9 @@ ggraph(tidyverse_tbl, layout = 'nicely') +
   theme_minimal()
 ```
 
-As you might expect, we see many intersecting lines traversing in all directions. Many packages in the tidyverse import other packages in the tidyverse. This is expected as each piece of the tidyverse is developed in a coordinated manner. Let's then have a look at another task view where we might not expect to see the same degree of connectivity. The `ctv` package provides us with the vector of package names for a given task view (using the internal function `.get_pkgs_ctv_or_repos`. We can extract the packages in Environmetrics this and similarly create a network plot:
+As you might expect, we see many intersecting lines traversing in all directions. Many packages in the tidyverse import other packages in the tidyverse. This is expected as the tidyverse is developed in a coordinated manner. 
+
+Next, let's have a look at the Environmetrics task view where we might not expect to see the same degree of connectivity. The `ctv` package provides us with the vector of package names for a given task view, which we can use to similarly create a network plot:
 
 ```{r}
 env_packages <- ctv:::.get_pkgs_from_ctv_or_repos(views = "Environmetrics", 
@@ -81,7 +83,9 @@ ggraph(env_tbl, layout = 'nicely') +
   theme_minimal()
 ```
 
-While there are clearly fewer connections than in the tidyverse package ecosystem, there is still quite a large amount of connectivity in Environmetrics package. In particular the `mgcv`, `MASS`, `vegan` and `zoo` packages all provide critical infrastructure for those developing packages in this field. This presumably can at least partially be attributed to the age of the Environmetrics package. Last we can evaluate the new hydrology task view:
+While there are clearly fewer connections than in the tidyverse package ecosystem, there is still quite a large amount of connectivity in Environmetrics task view In particular the `mgcv`, `MASS`, `vegan` and `zoo` packages all provide critical infrastructure for those developing packages in this field. This presumably can at least partially be attributed to the age of the Environmetrics package. 
+
+Finally, we can evaluate the new Hydrology task view:
 
 ```{r}
 hyd_packages <- ctv:::.get_pkgs_from_ctv_or_repos(views = "Hydrology", 
@@ -103,4 +107,4 @@ ggraph(hyd_tbl, layout = 'nicely') +
 
 ```
 
-Clearly some connectivity was already happening in the hydrology space serving as a reminder that CRAN task views aren't the only place people discover packages to use. However, if the Hydrology CRAN task view can enhance this connectivity, developers and hydrologist can leverage the efforts of others in the hydrology space. A topic in R can live in many places without detracting from others. Twitter, stack OverFlow and GitHub are all obviously great places to strengthen the community of water practioners using R. Our task view hopefully will join those spaces as a tool to enable shared efforts towards water management. You can contribute to the task view by opening an issue or pull request at out [project repo](https://github.com/ropensci/Hydrology)
+Clearly, some connectivity among water-related packages is already happening, which serves as a reminder that CRAN task views aren't the only place people discover packages to use. However, if the Hydrology CRAN task view can enhance this connectivity, developers and hydrologist can leverage the efforts of others in the hydrology space. A topic in R can live in many places without detracting from others. Twitter, Stack OverFlow and GitHub are all obviously great places to strengthen the community of water practioners using R. Our task view hopefully will join those spaces as a tool to enable shared efforts towards water management. You can contribute to the task view by opening an issue or pull request at out [project repo](https://github.com/ropensci/Hydrology).
