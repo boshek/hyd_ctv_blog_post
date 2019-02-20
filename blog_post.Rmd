@@ -119,4 +119,19 @@ It can expected that with a growing uptake of R in the hydrological community mo
 At the moment the landscape of R for hydrologists is quite fragmented, but in time it might be that some `core' packages to manipulate data will emerge and several computational approaches to hydrological models will be centralised in a unique package. 
 Regardless of how the landscape of hydrology packages will evolve, R and open source tools are becoming more and more important in the hydrological community, and we are happy to have made a small contribution to make it easier for everybody to know what can already be done with water data in R. 
 
+```{r countDownloads}
+library(cranlogs)
+unpkg <- hyd_tbl %>% 
+  group_by(Package) %>% 
+  summarise(pkg = unique(Package))
+
+## select the last 5 years 
+pkgcount <- cran_downloads(packages = unpkg$pkg, 
+                           from = today()-5*365, to = today()) %>%
+         select(-date) %>%
+         group_by(package) %>% 
+         summarise(counts = sum(count)) %>%
+         arrange(desc(counts))
+# hydroTSM hydroGOF and rnoaa dominate the chart 
+```
 
