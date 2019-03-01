@@ -1,7 +1,7 @@
 ---
 title: "Getting your toes wet in R: Hydrology, meteorology, and more"
 author: "Sam Albers, Ilaria Prosdocimi and Sam Zipper, "
-date: "18/02/2019"
+date: `r Sys.Date()`
 output: html_document
 ---
 
@@ -10,15 +10,15 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Importance of Hydrology
-Given that liquid water is [essential to life on Earth](https://www.amnh.org/explore/science-topics/water-and-life-on-earth), water research cuts across numerous disciplines including hydrology, meteorology, geography, climate science, engineering, ecology, and more. Numerous R packages have emerged from this diversity of approaches, and we recently gathered many of these packages into a new [task view](https://github.com/ropensci/Hydrology) which we broadly titled 'hydrology' and posted to [CRAN](https://CRAN.R-project.org/view=Hydrology). Our intent is to be exhaustive and compile R packages to access, model, and summarise information related to the movement of water across the Earth's landscape. We hope to contribute to a [nascent community of hydrological R users](https://www.hydrol-earth-syst-sci-discuss.net/hess-2019-50/) and develop an infrastructure of packages that provide a comprehensive toolkit for water practitioners who use R as their preferred computational analysis tool. Making sense of water data is critical to understanding the response of landscapes to climate change. Consolidating water-related packages will promote their usage and discovery and ultimately facilitate reproducible workflows for water research. Since this is a new task view, it serves our purpose to evaluate the current State of Hydrology in R and look at the interdependency of hydrology packages against some better known collections of packages in the general R ecosystem. 
+Given that liquid water is [essential to life on Earth](https://www.amnh.org/explore/science-topics/water-and-life-on-earth), water research cuts across numerous disciplines including hydrology, meteorology, geography, climate science, engineering, ecology, and more. Numerous R packages have emerged from this diversity of approaches, and we recently gathered many of these packages into a new [task view](https://github.com/ropensci/Hydrology) which we broadly titled 'Hydrology' and published to [CRAN](https://CRAN.R-project.org/view=Hydrology). Our intent is to be exhaustive and compile R packages to access, model, and summarise information related to the movement of water across the Earth's landscape. We hope to contribute to a [nascent community of hydrological R users](https://www.hydrol-earth-syst-sci-discuss.net/hess-2019-50/) and develop an infrastructure of packages that provide a comprehensive toolkit for water practitioners who use R as their preferred computational analysis tool. Making sense of water data is critical to understanding the response of landscapes to a changing climate. Consolidating water-related packages will promote their usage and discovery and ultimately facilitate reproducible workflows for water research. Since this is a new task view, it serves our purpose to evaluate the current **State of Hydrology** in R and look at the interdependency of hydrology packages relative to some better known collections of packages in the general R ecosystem. 
 
 ## State of Hydrology in R
-We will conduct a high-level assessment of the state of hydrology in R by visualizing network connectivity among package dependencies -- which packages use code from one package to accomplish a task. For context, we will evaluate our Hydrology task view against the most well-known collection of packages in R, the [tidyverse](https://www.tidyverse.org/), and the venerable [Environmetrics task view](https://CRAN.R-project.org/view=Environmetrics
-) which includes many packages for environmental Analysis. To do that we need write some R code:
+We will conduct a high-level assessment of the state of hydrology in R by visualizing network connectivity among package dependencies -- which packages use code from one package to accomplish a task. For context, we will evaluate our Hydrology task view against the **most** well-known collection of packages in R, the [tidyverse](https://www.tidyverse.org/), and the venerable [Environmetrics task view](https://CRAN.R-project.org/view=Environmetrics
+) which includes many packages for environmental analysis. To do that we need write some R code:
 
 ![](https://media.giphy.com/media/xT8qBmSnYDXS21ZvHO/giphy.gif)
 
- and load our required packages
+and load our required packages
 
 ```{r}
 suppressPackageStartupMessages(library(tidyverse))
@@ -55,9 +55,8 @@ tidyverse_tbl <- tidied_cran_imports %>%
 
 ggraph(tidyverse_tbl, layout = 'nicely') + 
   geom_edge_link() + 
-  geom_node_point() +
-  geom_node_label(aes(label = name), repel = TRUE, colour = "blue") +
-  theme_minimal()
+  #geom_node_point() +
+  geom_node_label(aes(label = name), colour = "blue") 
 ```
 
 As you might expect, we see many intersecting lines traversing in all directions. Many packages in the tidyverse import other packages in the tidyverse. This is expected as the tidyverse is developed in a coordinated manner. 
@@ -78,8 +77,8 @@ env_tbl <- tidied_cran_imports %>%
 
 ggraph(env_tbl, layout = 'nicely') + 
   geom_edge_link() + 
-  geom_node_point() +
-  geom_node_label(aes(label = name), repel = TRUE, colour = "blue") +
+  #geom_node_point() +
+  geom_node_label(aes(label = name), colour = "blue") +
   theme_minimal()
 ```
 
@@ -101,8 +100,8 @@ hyd_tbl <- tidied_cran_imports %>%
 
 ggraph(hyd_tbl, layout = 'nicely') + 
   geom_edge_link() + 
-  geom_node_point() +
-  geom_node_label(aes(label = name), repel = TRUE, colour = "blue") +
+  #geom_node_point() +
+  geom_node_label(aes(label = name), colour = "blue") +
   theme_minimal()
 
 ```
@@ -114,24 +113,27 @@ Clearly, some connectivity among water-related packages is already happening, wh
 
 Hydrology, like many other sciences, is becoming more and more data driven and programmatic ways to access, manipulate and model data in a reproducible workflow are becoming a necessity. 
 Water related data though has its own specific challenges, which are similar but different from those of other data sources. 
-<!-- The Hydrology Task Force aims to be the unique point where R users interested in analysiing water data can find information on what tools are currently available to them.  -->
+<!-- The Hydrology Task Force aims to be the unique point where R users interested in analysing water data can find information on what tools are currently available to them.  -->
 It can expected that with a growing uptake of R in the hydrological community more packages will be available, with more interconnectivity between them. 
 At the moment the landscape of R for hydrologists is quite fragmented, but in time it might be that some `core' packages to manipulate data will emerge and several computational approaches to hydrological models will be centralised in a unique package. 
 Regardless of how the landscape of hydrology packages will evolve, R and open source tools are becoming more and more important in the hydrological community, and we are happy to have made a small contribution to make it easier for everybody to know what can already be done with water data in R. 
 
 ```{r countDownloads}
 library(cranlogs)
-unpkg <- hyd_tbl %>% 
-  group_by(Package) %>% 
-  summarise(pkg = unique(Package))
+## Some sort of downloads per year would be nice.
 
 ## select the last 5 years 
-pkgcount <- cran_downloads(packages = unpkg$pkg, 
-                           from = today()-5*365, to = today()) %>%
-         select(-date) %>%
-         group_by(package) %>% 
-         summarise(counts = sum(count)) %>%
-         arrange(desc(counts))
+pkgcount <- cran_downloads(packages = hyd_packages, 
+                           from = Sys.Date()-5*365, to = Sys.Date())
+pkgcount %>% 
+  group_by(package) %>% 
+  summarise(downloads = sum(count)) %>% 
+  arrange(desc(downloads)) 
+# %>% View()
+#   mutate(group = ifelse(downloads >= 10000, "Over 10000", "Under 10000")) %>% 
+#   ggplot() +
+#   geom_col(aes(x = package, y = downloads)) +
+#   facet_wrap(~group, scales = "free")
 # hydroTSM hydroGOF and rnoaa dominate the chart 
 ```
 
