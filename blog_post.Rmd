@@ -25,6 +25,7 @@ suppressPackageStartupMessages(library(tidyverse))
 library(tidygraph, warn.conflicts = FALSE)
 library(ggraph)
 library(ctv)
+library(hrbrthemes)
 ```
 
 We will use the handy `CRAN_package_db` function from the `tools` package (part of base R) which conveniently grabs information from the DESCRIPTION file of every package and turns it into a dataframe. Here we are only after a few columns so we will extract those right away:
@@ -38,9 +39,11 @@ tidied_cran_imports <- all_cran_packages %>%
   as_tibble() %>% 
   mutate(Imports = stringr::str_split(Imports, ",")) %>% 
   unnest(Imports) %>% 
-  mutate(Imports = str_replace(Imports,"\\(.*?\\)|\n","") ) %>%
+  mutate(Imports = str_replace(Imports,"\\s*\\([^\\)]+\\)","") ) %>%
+  #mutate(Imports = str_replace(Imports,"\\(.*?\\)|\n","") ) %>%
   mutate(Imports = str_trim(Imports, side = "both")) %>%  
   mutate(Packaged = str_replace(Packaged, ";.*","")) %>%
+  filter(!is.na(Imports)) %>% 
   #mutate(Packaged = str_replace(Packaged, " UTC","")) %>%
   mutate(Packaged = format(as.Date(Packaged), "%Y"))
 ```
@@ -51,12 +54,15 @@ tidyverse_tbl <- tidied_cran_imports %>%
   select(-Packaged) %>% 
   filter(Package %in% tidyverse_packages()) %>% 
   filter(Imports %in% tidyverse_packages()) %>% 
-  as_tbl_graph() 
+  as_tbl_graph() %>% 
+  activate(what = "edges")
 
 ggraph(tidyverse_tbl, layout = 'nicely') + 
   geom_edge_link() + 
   #geom_node_point() +
-  geom_node_label(aes(label = name), colour = "blue") 
+  geom_node_label(aes(label = name), colour = "blue") +
+  theme_ft_rc(grid="") +
+  theme(axis.text=element_blank())
 ```
 
 As you might expect, we see many intersecting lines traversing in all directions. Many packages in the tidyverse import other packages in the tidyverse. This is expected as the tidyverse is developed in a coordinated manner. 
