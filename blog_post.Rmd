@@ -58,6 +58,7 @@ theme_set(theme_void() %+replace%
             theme(legend.text = element_text(colour = "white", size = 12),
                   legend.title = element_text(colour = "white", size = 12),
                   plot.background = element_rect(fill = bg_black, color = bg_black),
+                  plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm"),
                   plot.title = element_text(colour = "white", size = 16, hjust = 0)))
 ```
 
@@ -127,14 +128,15 @@ ggraph(hyd_tbl, layout = 'nicely') +
 
 Clearly some connectivity among water-related packages is already happening, which serves as a reminder that CRAN task views aren't the only place people discover packages to use. Some tools form a hub of connected packages because they share a common package maintainer (see `hydroGOF`) while others like `CityWaterBalance` draw upon a diverse suite of `Hydrology` packages to study urban water systems. Many rOpenSci packages have been included in the task view (`bomrang`, `dbhydroR`, `GSODR`, `hddtools`, `hydroscoper`,`MODIStsp`, `rnoaa`, `smapr`, `tidyhydat`, `weathercan`). `rnoaa` in particular is a key piece of infrastructure that underpins many analyses in hydrological research. The plot below summarises the number of downloads from the RStudio CRAN mirror over the past year. It is illustrative that the top four packages feature two modelling packages and two data packages. These are the basic tenets of hydrological research and indicate how those in the hydrological space are using R.   
 
-```{r countDownloads, cache = TRUE, fig.width=12, fig.height=8}
+```{r countDownloads, fig.width=12, fig.height=8}
 pkgcount <- cran_downloads(packages = hyd_packages, 
                            from = Sys.Date()-1*365, 
-                           to = Sys.Date())
-pkgcount %>%
+                           to = Sys.Date()) %>%
   group_by(package) %>%
   summarise(downloads = sum(count)) %>%
-  filter(downloads >= 5000) %>%
+  filter(downloads >= 5000)
+
+pkgcount %>%
   ggplot(aes(x = reorder(package, downloads), y = downloads)) +
   geom_col(aes(fill = downloads)) +
   geom_text(aes(y = 1000, label = package), size = 5.5, colour = "white", 

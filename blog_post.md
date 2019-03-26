@@ -34,6 +34,7 @@ We will conduct a high-level assessment of the state of hydrology in R by visual
 
 
 
+
 ```r
 library(tidyverse)
 library(tidygraph)
@@ -126,11 +127,12 @@ Clearly some connectivity among water-related packages is already happening, whi
 ```r
 pkgcount <- cran_downloads(packages = hyd_packages, 
                            from = Sys.Date()-1*365, 
-                           to = Sys.Date())
-pkgcount %>%
+                           to = Sys.Date()) %>%
   group_by(package) %>%
   summarise(downloads = sum(count)) %>%
-  filter(downloads >= 5000) %>%
+  filter(downloads >= 5000)
+
+pkgcount %>%
   ggplot(aes(x = reorder(package, downloads), y = downloads)) +
   geom_col(aes(fill = downloads)) +
   geom_text(aes(y = 1000, label = package), size = 5.5, colour = "white", 
