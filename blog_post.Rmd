@@ -57,6 +57,7 @@ bg_black <- "#29303a"
 theme_set(theme_void() %+replace%
             theme(legend.text = element_text(colour = "white", size = 12),
                   legend.title = element_text(colour = "white", size = 12),
+                  plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm"),
                   plot.background = element_rect(fill = bg_black, color = bg_black),
                   plot.title = element_text(colour = "white", size = 16, hjust = 0)))
 ```
@@ -86,7 +87,7 @@ tidyverse_tbl <- tidied_cran_imports %>%
 
 ggraph(tidyverse_tbl, layout = 'nicely') + 
   geom_edge_link(colour = "grey50") + 
-  geom_node_text(aes(label = name), colour = "#F0F921FF", size = 6) 
+  geom_node_text(aes(label = name), colour = "#F0F921FF", size = 5.5) 
 ```
 
 As you might expect, we see many intersecting lines traversing in all directions. Many packages in the tidyverse import other packages in the tidyverse. This is expected as the tidyverse is developed in a coordinated manner. 
@@ -104,7 +105,7 @@ env_tbl <- tidied_cran_imports %>%
 
 ggraph(env_tbl, layout = 'nicely') + 
   geom_edge_link(colour = "grey50") + 
-  geom_node_text(aes(label = name), colour = "#FDB32FFF", size = 6) 
+  geom_node_text(aes(label = name), colour = "#FDB32FFF", size = 5.5) 
 ```
 
 While there are clearly fewer connections than in the tidyverse package ecosystem, there is still quite a large amount of connectivity in Environmetrics task view In particular the `mgcv`, `MASS`, `vegan` and `zoo` packages all provide critical infrastructure for those developing packages in this field. This presumably can at least partially be attributed to the age (and therefore the maturity) of the Environmetrics task view. 
@@ -122,12 +123,12 @@ hyd_tbl <- tidied_cran_imports %>%
 
 ggraph(hyd_tbl, layout = 'nicely') + 
   geom_edge_link(colour = "grey50") + 
-  geom_node_text(aes(label = name), colour = "#ED7953FF", size = 6)
+  geom_node_text(aes(label = name), colour = "#ED7953FF", size = 5.5)
 ```
 
 Clearly, some connectivity among water-related packages is already happening, which serves as a reminder that CRAN task views aren't the only place people discover packages to use. Several rOpenSci packages have been included in the task view (`bomrang`, `dbhydroR`, `GSODR`, `hddtools`, `hydroscoper`,`MODIStsp`, `rnoaa`, `smapr`, `tidyhydat`, `weathercan`). `rnoaa` in particular is a key piece of infrastructure that underpins many analyses in hydrological research. The plot below summarises the number of downloads from the RStudio CRAN mirror over the past year. It is illustrative that the top four packages feature two modelling packages and two data packages. There are the basic tenants of hydrological research and indicate how those in the hydrological space are using R.   
 
-```{r countDownloads, cache = TRUE, fig.width=12, fig.height=8}
+```{r countDownloads, fig.width=12, fig.height=8}
 pkgcount <- cran_downloads(packages = hyd_packages, 
                            from = Sys.Date()-1*365, 
                            to = Sys.Date())
@@ -147,9 +148,7 @@ If the Hydrology CRAN task view can play a role to enhance this connectivity, de
 
 ## Future of R for Hydrology
 
-Hydrology, like many other sciences, is becoming more and more data driven and programmatic ways to access, manipulate and model data in a reproducible workflow are becoming a necessity. 
-Water related data though has its own specific challenges, which are similar but different from those of other data sources. It can expected that with a growing uptake of R in the hydrological community more packages will be available, with more interconnectivity between them. At the moment the landscape of R for hydrologists is quite fragmented, but in time it might be that some `core' packages to manipulate data will emerge and several computational approaches to hydrological models will be centralised in a unique package. 
-Regardless of how the landscape of hydrology packages will evolve, R and open source tools are becoming more and more important in the hydrological community, and we are happy to have made a small contribution to make it easier for everybody to know what can already be done with water data in R. 
+Hydrology, like many other sciences, is becoming more and more data driven and programmatic ways to access, manipulate and model data in a reproducible workflow are becoming a necessity. Water related data though has its own specific challenges, which are similar but different from those of other data sources. It can expected that with a growing uptake of R in the hydrological community more packages will be available, with more interconnectivity between them. At the moment the landscape of R for hydrologists is quite fragmented, but in time it might be that some `core' packages to manipulate data will emerge and several computational approaches to hydrological models will be centralised in a unique package. Regardless of how the landscape of hydrology packages will evolve, R and open source tools are becoming more and more important in the hydrological community, and we are happy to have made a small contribution to make it easier for everybody to know what can already be done with water data in R. 
 
 
 

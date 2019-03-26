@@ -74,7 +74,7 @@ tidyverse_tbl <- tidied_cran_imports %>%
 
 ggraph(tidyverse_tbl, layout = 'nicely') + 
   geom_edge_link(colour = "grey50") + 
-  geom_node_text(aes(label = name), colour = "#F0F921FF", size = 6) 
+  geom_node_text(aes(label = name), colour = "#F0F921FF", size = 5.5) 
 ```
 
 ![](blog_post_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
@@ -95,7 +95,7 @@ env_tbl <- tidied_cran_imports %>%
 
 ggraph(env_tbl, layout = 'nicely') + 
   geom_edge_link(colour = "grey50") + 
-  geom_node_text(aes(label = name), colour = "#FDB32FFF", size = 6) 
+  geom_node_text(aes(label = name), colour = "#FDB32FFF", size = 5.5) 
 ```
 
 ![](blog_post_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
@@ -116,7 +116,7 @@ hyd_tbl <- tidied_cran_imports %>%
 
 ggraph(hyd_tbl, layout = 'nicely') + 
   geom_edge_link(colour = "grey50") + 
-  geom_node_text(aes(label = name), colour = "#ED7953FF", size = 6)
+  geom_node_text(aes(label = name), colour = "#ED7953FF", size = 5.5)
 ```
 
 ![](blog_post_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
@@ -146,9 +146,7 @@ If the Hydrology CRAN task view can play a role to enhance this connectivity, de
 
 ## Future of R for Hydrology
 
-Hydrology, like many other sciences, is becoming more and more data driven and programmatic ways to access, manipulate and model data in a reproducible workflow are becoming a necessity. 
-Water related data though has its own specific challenges, which are similar but different from those of other data sources. It can expected that with a growing uptake of R in the hydrological community more packages will be available, with more interconnectivity between them. At the moment the landscape of R for hydrologists is quite fragmented, but in time it might be that some `core' packages to manipulate data will emerge and several computational approaches to hydrological models will be centralised in a unique package. 
-Regardless of how the landscape of hydrology packages will evolve, R and open source tools are becoming more and more important in the hydrological community, and we are happy to have made a small contribution to make it easier for everybody to know what can already be done with water data in R. 
+Hydrology, like many other sciences, is becoming more and more data driven and programmatic ways to access, manipulate and model data in a reproducible workflow are becoming a necessity. Water related data though has its own specific challenges, which are similar but different from those of other data sources. It can expected that with a growing uptake of R in the hydrological community more packages will be available, with more interconnectivity between them. At the moment the landscape of R for hydrologists is quite fragmented, but in time it might be that some `core' packages to manipulate data will emerge and several computational approaches to hydrological models will be centralised in a unique package. Regardless of how the landscape of hydrology packages will evolve, R and open source tools are becoming more and more important in the hydrological community, and we are happy to have made a small contribution to make it easier for everybody to know what can already be done with water data in R. 
 
 
 
